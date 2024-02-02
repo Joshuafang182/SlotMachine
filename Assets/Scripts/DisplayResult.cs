@@ -1,19 +1,15 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class DisplayResult : MonoBehaviour
 {
     [SerializeField, Header("圖案")]
     private ItemData itemData;
 
-    [Header("Setting")]
-    public float spineDuration = 3.0f;
-    public float spineSpeed = 1.0f;
-
     private Dictionary<string, Sprite> sprites = new Dictionary<string, Sprite>();
     private SpinWheel[] _spinWheels;
-    private SpinWheel[] SpinWheels
+
+    public SpinWheel[] SpinWheels
     {
         get
         {
@@ -33,22 +29,46 @@ public class DisplayResult : MonoBehaviour
             sprites.Add(item.name, item);
         }
 
-        for(int i = 0; i < SpinWheels.Length; i++)
+        for (int j = 0; j < SpinWheels.Length; j++)
         {
-            SpinWheels[i].Set(1, sprites[PublicFunction.RandomLetters(1)]);
+            Display(j, 0, "a");
+            Display(j, 1, "a");
         }
     }
 
-    private void Display(int i, string c)
+    public void SpinAndShow(string[] strings)
     {
-        SpinWheels[i].Set(1, sprites[c]);
+        for (int i = 0; i < SpinWheels.Length; i++)
+        {
+            if (!SpinWheels[i].stop) continue;
+            SpinWheels[i].Set(1, this.sprites[PublicFunction.RandomLetters(1)]);
+            Queue<Sprite> sprites = CreateRandomSpriteQueue(20);
+            string s = strings[i];
+            StartCoroutine(SpinWheels[i].Spinning(20, sprites, this.sprites[s]));
+        }
     }
 
-    public void Show(string[] strings)
+    private Queue<Sprite> CreateRandomSpriteQueue(int numberOfSprite)
     {
-        for (int i = 0;i < strings.Length;i++)
+        Queue<Sprite> queue = new Queue<Sprite>(numberOfSprite);
+        for (int i = 0; i < numberOfSprite; i++)
         {
-            Display(i, strings[i]);
+            string randomLetter = PublicFunction.RandomLetters(1);
+            queue.Enqueue(sprites[randomLetter]);
+        }
+        return queue;
+    }
+
+    private void Display(int wheelIndex, int imageIndex, string spriteKey)
+    {
+        SpinWheels[wheelIndex].Set(imageIndex, sprites[spriteKey]);
+    }
+
+    public void Stop()
+    {
+        for (int k = 0; k < SpinWheels.Length; k++)
+        {
+            SpinWheels[k].stop = true;
         }
     }
 
