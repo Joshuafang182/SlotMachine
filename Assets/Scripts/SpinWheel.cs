@@ -2,12 +2,13 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public class SpinWheel : MonoBehaviour
 {
     public Image[] image;
-    private RectTransform rectTransform_Back;
-    private RectTransform rectTransform_Front;
+    public RectTransform rectTransform_Back;
+    public RectTransform rectTransform_Front;
 
     private void Start()
     {
@@ -22,10 +23,16 @@ public class SpinWheel : MonoBehaviour
         image[index].sprite = sprite;
     }
 
-    //private IEnumerator Spinning(int times)
-    //{
-    //    image[0].sprite = image[1].sprite;
-    //    rectTransform_Front.anchoredPosition = new Vector2(0, 120);
-    //}
+    public IEnumerator Spinning(int times)
+    {
+        while (times > 0)
+        {
+            image[0].sprite = image[1].sprite;
+            rectTransform_Front.anchoredPosition = new Vector2(0, 120);
+            rectTransform_Front.DOAnchorPosY(0, .1f, false);
+            yield return new WaitForSeconds(.1f);
+            times--;
+        }
+    }
 
 }
