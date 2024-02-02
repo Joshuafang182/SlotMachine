@@ -7,17 +7,21 @@ public class DisplayResult : MonoBehaviour
     [SerializeField, Header("圖案")]
     private ItemData itemData;
 
+    [Header("Setting")]
+    public float spineDuration = 3.0f;
+    public float spineSpeed = 1.0f;
+
     private Dictionary<string, Sprite> sprites = new Dictionary<string, Sprite>();
-    private Image[] _images;
-    private Image[] images
+    private SpinWheel[] _spinWheels;
+    private SpinWheel[] SpinWheels
     {
         get
         {
-            if (_images == null)
-                _images = GetComponentsInChildren<Image>();
-            return _images;
+            if (_spinWheels == null)
+                _spinWheels = GetComponentsInChildren<SpinWheel>();
+            return _spinWheels;
         }
-        set { _images = value; }
+        set { _spinWheels = value; }
     }
 
     private void Start()
@@ -29,16 +33,23 @@ public class DisplayResult : MonoBehaviour
             sprites.Add(item.name, item);
         }
 
-        for(int i = 0; i < images.Length; i++)
+        for(int i = 0; i < SpinWheels.Length; i++)
         {
-            char randomLetter = (char)('a' + Random.Range(0, 17));
-            images[i].sprite = sprites[randomLetter.ToString()];
+            SpinWheels[i].Set(1, sprites[PublicFunction.RandomLetters(1)]);
         }
     }
 
-    public void Display(int i, string c)
+    private void Display(int i, string c)
     {
-        images[i].sprite = sprites[c];
+        SpinWheels[i].Set(1, sprites[c]);
+    }
+
+    public void Show(string[] strings)
+    {
+        for (int i = 0;i < strings.Length;i++)
+        {
+            Display(i, strings[i]);
+        }
     }
 
 }
