@@ -7,6 +7,11 @@ namespace Joshua.Presenter
 {
     public class SlotMachinePresenter : MonoBehaviour
     {
+        [SerializeField, Header("冷卻時間")]
+        private float cooldownTime = 1.0f;
+
+        private float lastPressTime = 0f;
+
         private readonly string getroll = "https://pas2-game-rd-lb.sayyogames.com:61337/api/unityexam/getroll";
 
         private DataHandle dataHandle = new DataHandle();
@@ -42,8 +47,11 @@ namespace Joshua.Presenter
                 return;
             }
 
+            if (Time.time - lastPressTime < cooldownTime) return;
+
             StartCoroutine(dataHandle.SendRequest(getroll, "spin", "test"));
             view.Bt_SpinText.text = "Stop!";
+            lastPressTime = Time.time;
         }
 
     }
