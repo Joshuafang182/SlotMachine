@@ -1,0 +1,53 @@
+using Joshua.Model;
+using Joshua.View;
+using System;
+using UnityEngine;
+
+namespace Joshua.Presenter
+{
+    public class SlotMachinePresenter : MonoBehaviour
+    {
+        private readonly string getroll = "https://pas2-game-rd-lb.sayyogames.com:61337/api/unityexam/getroll";
+
+        private DataHandle dataHandle = new DataHandle();
+        private SlotMachineView view;
+
+        private void Start()
+        {
+            view = transform.GetComponentInChildren<SlotMachineView>();
+
+            view.PressedReceive += GetRollTask;
+            dataHandle.RequestComplete += OnRequestComplete;
+        }
+
+        private void OnDestroy()
+        {
+            view.PressedReceive -= GetRollTask;
+            dataHandle.RequestComplete -= OnRequestComplete;
+        }
+
+
+
+        private void OnRequestComplete(object sender, EventArgs e)
+        {
+            view.SpinAndShow(dataHandle.ReturnRoll.CURRENT_ROLL);
+        }
+
+        private void GetRollTask(object sender, EventArgs e)
+        {
+            if (!view.SpinWheels[0].Stop)
+            {
+                view.Stop();
+                view.Bt_SpinText.text = "Spin!";
+                return;
+            }
+
+            StartCoroutine(dataHandle.SendRequest(getroll, "spin", "test"));
+            view.Bt_SpinText.text = "Stop!";
+        }
+
+    }
+
+}
+
+

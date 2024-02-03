@@ -1,15 +1,24 @@
 using UnityEngine;
 
-public static class PublicFunction
+namespace Joshua.Publlic
 {
-    public static string RandomLetters(int numberOfLetters)
+    public static class PublicFunction
     {
-        string res = string.Empty;
-        for (int i = 0; i < numberOfLetters; i++)
+        /// <summary>
+        /// 產生隨機小寫字母字串
+        /// </summary>
+        /// <param name="numberOfLetters">字串長度</param>
+        /// <returns>字串</returns>
+        public static string RandomLetters(int numberOfLetters)
         {
-            char randomLetter = (char)('a' + Random.Range(0, 17));
-            res += randomLetter.ToString();
+            string res = string.Empty;
+            for (int i = 0; i < numberOfLetters; i++)
+            {
+                char randomLetter = (char)('a' + Random.Range(0, 17));
+                res += randomLetter.ToString();
+            }
+            return res;
         }
-        return res;
     }
+
 }
