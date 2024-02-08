@@ -86,7 +86,6 @@ GameObject:
   - component: {fileID: 1535598986751676349}
   - component: {fileID: 8122234124459535191}
   - component: {fileID: 197226728487181945}
-  - component: {fileID: 86776235513522411}
   m_Layer: 5
   m_Name: SpinWheel
   m_TagString: Untagged
@@ -137,21 +136,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Padding: {x: 0, y: 0, z: 0, w: 0}
   m_Softness: {x: 0, y: 0}
---- !u!114 &86776235513522411
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4979289650902740865}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2392a0d90ae41b2429a58a47fb077087, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  image: []
-  rectTransform_Back: {fileID: 0}
-  rectTransform_Front: {fileID: 0}
 --- !u!1 &9120157415703711500
 GameObject:
   m_ObjectHideFlags: 0

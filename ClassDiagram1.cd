@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Joshua.View.SpinWheel">
+    <Position X="3.5" Y="4" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAIAAEAAAAAAAAAAAAAEAAAAAAAIAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\SpinWheel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Joshua.View.SlotMachineView">
+    <Position X="0.5" Y="0.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAABIEAAAGAAAAAAIAAQSwIAAEiCAAACIAAAAACAAgA=</HashCode>
+      <FileName>Assets\Scripts\SlotMachineView.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Joshua.Model.DataHandle">
+    <Position X="6.5" Y="0.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAACAAAAAAAAAAAAACAAAAAAQAAAAEAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\DataHandle.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Joshua.Model.ReturnRoll">
+    <Position X="8.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAACAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAQAA=</HashCode>
+      <FileName>Assets\Scripts\DataHandle.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Joshua.Presenter.SlotMachinePresenter">
+    <Position X="3.5" Y="0.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAABAYAAACAAACgAAAAAAAKAAAAAAAAAAQAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\SlotMachinePresenter.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Microsoft JhengHei UI" Size="9" />
+</ClassDiagram>

@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace Joshua.Presenter
 {
+    [RequireComponent(typeof(SlotMachineView))]
     public class SlotMachinePresenter : MonoBehaviour
     {
         [SerializeField, Header("冷卻時間")]
@@ -19,7 +20,7 @@ namespace Joshua.Presenter
 
         private void Start()
         {
-            view = transform.GetComponentInChildren<SlotMachineView>();
+            view = transform.GetComponent<SlotMachineView>();
 
             view.PressedReceive += GetRollTask;
             dataHandle.RequestComplete += OnRequestComplete;
