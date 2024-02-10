@@ -1,4 +1,5 @@
 using DG.Tweening;
+using Joshua.Presenter;
 using Joshua.Publlic;
 using System;
 using System.Collections;
@@ -11,6 +12,7 @@ namespace Joshua.View
 {
     public class SlotMachineView : MonoBehaviour
     {
+        private SlotMachinePresenter _presenter;
         private ItemData itemData; // 轉輪的資料
         private GameObject prefab; // 轉輪的Prefab
         private Dictionary<string, Sprite> sprites = new Dictionary<string, Sprite>();
@@ -27,9 +29,10 @@ namespace Joshua.View
                 {
                     Transform root = GameObject.Find("Container").transform;
                     _spinWheels = new SpinWheel[itemData.NumberOfSpinWheels];
+                    GameObject go;
                     for (int j = 0; j < itemData.NumberOfSpinWheels; j++)
                     {
-                        GameObject go = Instantiate(prefab, root);
+                        go = Instantiate(prefab, root);
                         Image[] images = go.GetComponentsInChildren<Image>();
                         SpinWheel spinWheel = new(images);
                         _spinWheels[j] = spinWheel;
@@ -54,23 +57,20 @@ namespace Joshua.View
             add { pressedReceive += value; }
             remove { pressedReceive -= value; }
         }
-
-        private void Start()
+        private void Awake()
         {
             Bt_Spin = GameObject.Find("Bt_Spin");
             Bt_Spin.GetComponent<Button>().onClick.AddListener(() => OnButtonPressed());
+            Bt_SpinText = GameObject.Find("Bt_Spin/Bt_Text").GetComponent<TextMeshProUGUI>();
 
             itemData = Resources.Load<ItemData>("Data/SpritesData");
             prefab = Resources.Load<GameObject>("Prefabs/SpinWheel");
-            Bt_SpinText = GameObject.Find("Bt_Spin/Bt_Text").GetComponent<TextMeshProUGUI>();
 
-            StopReceive += OnStoped;
+            _presenter = new SlotMachinePresenter(this);
 
-            StartStrongButtonAnim();
-
-            foreach (var item in itemData.sprites)
+            for (int i = 0; i < itemData.sprites.Length; i++)
             {
-                sprites.Add(item.name, item);
+                sprites.Add(itemData.sprites[i].name, itemData.sprites[i]);
             }
 
             for (int j = 0; j < SpinWheels.Length; j++)
@@ -81,22 +81,16 @@ namespace Joshua.View
         }
         private void OnDestroy()
         {
-            StopReceive -= OnStoped;
+            _presenter.Dispose();
+            _spinWheels = null;
         }
 
 
         private void OnButtonPressed()
         {
             pressedReceive?.Invoke(this, EventArgs.Empty);
-            Bt_Spin.transform.DOKill();
-            Bt_Spin.transform.localScale = Vector2.one;
         }
 
-        private void OnStoped(object sender, EventArgs e)
-        {
-            Bt_SpinText.text = "Spin!";
-            StartStrongButtonAnim();
-        }
         /// <summary>
         /// 轉動和顯示結果
         /// </summary>
@@ -149,9 +143,17 @@ namespace Joshua.View
             }
         }
         /// <summary>
+        /// 停止按鈕UI動畫
+        /// </summary>
+        public void StopStrongButtonAnim()
+        {
+            Bt_Spin.transform.DOKill();
+            Bt_Spin.transform.localScale = Vector2.one;
+        }
+        /// <summary>
         /// 開始呼吸動畫
         /// </summary>
-        private void StartStrongButtonAnim()
+        public void StartStrongButtonAnim()
         {
             Bt_Spin.transform.DOScale(0.1f, 1f)
             .SetRelative(true)

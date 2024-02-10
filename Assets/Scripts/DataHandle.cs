@@ -1,16 +1,18 @@
-using System.Collections;
 using UnityEngine;
 using UnityEngine.Networking;
 using System;
+using System.Threading.Tasks;
 
 namespace Joshua.Model
 {
     /// <summary>
     /// 處理網路和資料
     /// </summary>
-    public class DataHandle
+    public class DataHandle : IDisposable
     {
         public ReturnRoll ReturnRoll { get; private set; }
+
+        private bool disposed = false;
 
         private EventHandler requestComplete;
         public event EventHandler RequestComplete
@@ -26,13 +28,16 @@ namespace Joshua.Model
         /// <param name="v1">參數1</param>
         /// <param name="v2">參數2</param>
         /// <returns></returns>
-        public IEnumerator SendRequest(string url, string v1, string v2)
+        public async Task SendRequest(string url, string v1, string v2)
         {
             WWWForm form = new WWWForm();
             form.AddField(v1, v2);
 
             using UnityWebRequest www = UnityWebRequest.Post(url, form);
-            yield return www.SendWebRequest();
+            var operation = www.SendWebRequest();
+
+            while (!operation.isDone)
+                await Task.Yield();
 
             if (www.result != UnityWebRequest.Result.Success)
                 Debug.Log(www.error);
@@ -44,6 +49,32 @@ namespace Joshua.Model
                 requestComplete?.Invoke(this, EventArgs.Empty);
             }
 
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        private void Dispose(bool disposing)
+        {
+            if (!disposed)
+            {
+                if (disposing) Cleanup();
+
+                disposed = true;
+            }
+        }
+
+        private void Cleanup()
+        {
+            ReturnRoll = null;
+        }
+
+        ~DataHandle()
+        {
+            Dispose(false);
         }
     }
 
