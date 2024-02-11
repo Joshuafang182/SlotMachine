@@ -2,7 +2,7 @@ using DG.Tweening;
 using Joshua.Presenter;
 using Joshua.Publlic;
 using System;
-using System.Collections;
+using System.Threading.Tasks;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -103,7 +103,7 @@ namespace Joshua.View
                 Display(i, 1, PublicFunction.RandomLetters(1));
                 Queue<Sprite> sprites = CreateRandomSpriteQueue(20);
                 string s = strings[i];
-                StartCoroutine(Spinning(i, 20, sprites, this.sprites[s]));
+                _ = Spinning(i, 20, sprites, this.sprites[s]);
             }
         }
         /// <summary>
@@ -166,7 +166,7 @@ namespace Joshua.View
         /// <param name="times">旋轉次數</param>
         /// <param name="queue">隨機圖案佇列</param>
         /// <param name="finalSprite">最終結果</param>
-        private IEnumerator Spinning(int index, int times, Queue<Sprite> queue, Sprite finalSprite)
+        private async Task Spinning(int index, int times, Queue<Sprite> queue, Sprite finalSprite)
         {
             SpinWheels[index].Stop = false;
             while (times > 0)
@@ -177,7 +177,7 @@ namespace Joshua.View
                 SpinWheels[index].image[1].sprite = queue.Dequeue();
                 SpinWheels[index].rectTransform_Front.DOAnchorPosY(0, .1f, false);
                 SpinWheels[index].rectTransform_Back.DOAnchorPosY(-120, .1f, false);
-                yield return new WaitForSeconds(.1f);
+                await Task.Delay(100);
                 if (SpinWheels[index].Stop) break;
                 times--;
             }
@@ -188,12 +188,10 @@ namespace Joshua.View
             SpinWheels[index].image[1].sprite = finalSprite;
             SpinWheels[index].rectTransform_Front.DOAnchorPosY(0, .5f, false).SetEase(Ease.OutCubic);
             SpinWheels[index].rectTransform_Back.DOAnchorPosY(-120, .5f, false).SetEase(Ease.OutCubic);
-            yield return new WaitForSeconds(.5f);
+            await Task.Delay(500);
             SpinWheels[index].Stop = true;
 
-            if (index != 0) yield break;
-
-            stopReceive?.Invoke(this, EventArgs.Empty);
+            if (index == 0) stopReceive?.Invoke(this, EventArgs.Empty);
         }
     }
 
