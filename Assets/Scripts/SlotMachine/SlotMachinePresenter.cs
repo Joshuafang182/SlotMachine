@@ -1,5 +1,4 @@
 using Joshua.Model;
-using Joshua.View;
 using System;
 using UnityEngine;
 
@@ -13,15 +12,15 @@ namespace Joshua.Presenter
 
         private readonly string getroll = "https://pas2-game-rd-lb.sayyogames.com:61337/api/unityexam/getroll";
 
-        private DataHandle dataHandle;
-        private SlotMachineView view;
+        private readonly IDataHandle dataHandle;
+        private readonly ISlotMachineView view;
 
         private bool disposed = false;
 
-        public SlotMachinePresenter(SlotMachineView view)
+        public SlotMachinePresenter(ISlotMachineView view, IDataHandle dataHandle)
         {
             this.view = view;
-            dataHandle = new DataHandle();
+            this.dataHandle = dataHandle;
             view.PressedReceive += GetRollTask;
             view.StopReceive += OnStoped;
             dataHandle.RequestComplete += OnRequestComplete;
@@ -30,29 +29,29 @@ namespace Joshua.Presenter
 
         private void OnRequestComplete(object sender, EventArgs e)
         {
-            view.SpinAndShow(dataHandle.ReturnRoll.CURRENT_ROLL);
+            view.SpinAndShow(dataHandle.GetStrings());
         }
 
-        private async void GetRollTask(object sender, EventArgs e)
+        private void GetRollTask(object sender, EventArgs e)
         {
-            if (!view.SpinWheels[0].Stop)
+            if (!view.IsStop())
             {
                 view.Stop();
-                view.Bt_SpinText.text = "Spin!";
+                view.SetButtonText("Spin!");
                 return;
             }
 
             if (Time.time - lastPressTime < cooldownTime) return;
 
             view.StopStrongButtonAnim();
-            await dataHandle.SendRequest(getroll, "spin", "test");
+            _ = dataHandle.SendRequest(getroll, "spin", "test");
 
-            view.Bt_SpinText.text = "Stop!";
+            view.SetButtonText("Stop");
             lastPressTime = Time.time;
         }
         private void OnStoped(object sender, EventArgs e)
         {
-            view.Bt_SpinText.text = "Spin!";
+            view.SetButtonText("Spin!");
             view.StartStrongButtonAnim();
         }
 
@@ -81,7 +80,6 @@ namespace Joshua.Presenter
             }
 
             if (dataHandle != null) dataHandle.RequestComplete -= OnRequestComplete;
-            dataHandle.Dispose();
         }
 
         ~SlotMachinePresenter()

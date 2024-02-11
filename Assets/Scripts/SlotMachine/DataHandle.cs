@@ -8,11 +8,10 @@ namespace Joshua.Model
     /// <summary>
     /// 處理網路和資料
     /// </summary>
-    public class DataHandle : IDisposable
+    public class DataHandle : IDataHandle
     {
-        public ReturnRoll ReturnRoll { get; private set; }
+        private ReturnRoll data;
 
-        private bool disposed = false;
 
         private EventHandler requestComplete;
         public event EventHandler RequestComplete
@@ -20,7 +19,10 @@ namespace Joshua.Model
             add { requestComplete += value; }
             remove { requestComplete -= value; }
         }
-
+        public string[] GetStrings()
+        {
+            return data.CURRENT_ROLL;
+        }
         /// <summary>
         /// 發送POST請求
         /// </summary>
@@ -45,37 +47,12 @@ namespace Joshua.Model
             {
                 string jsonResponse = www.downloadHandler.text;
                 Debug.Log("Response" + jsonResponse);
-                ReturnRoll = JsonUtility.FromJson<ReturnRoll>(jsonResponse);
+                data = JsonUtility.FromJson<ReturnRoll>(jsonResponse);
                 requestComplete?.Invoke(this, EventArgs.Empty);
             }
 
         }
 
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        private void Dispose(bool disposing)
-        {
-            if (!disposed)
-            {
-                if (disposing) Cleanup();
-
-                disposed = true;
-            }
-        }
-
-        private void Cleanup()
-        {
-            ReturnRoll = null;
-        }
-
-        ~DataHandle()
-        {
-            Dispose(false);
-        }
     }
 
     [System.Serializable]
