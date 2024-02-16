@@ -10,7 +10,7 @@ namespace Joshua.Model
     /// </summary>
     public class DataHandle : IDataHandle
     {
-        private ReturnRoll data;
+        public ReturnRoll Data {  get; private set; }
 
 
         private EventHandler requestComplete;
@@ -21,7 +21,7 @@ namespace Joshua.Model
         }
         public string[] GetStrings()
         {
-            return data.CURRENT_ROLL;
+            return Data.CURRENT_ROLL;
         }
         /// <summary>
         /// 發送POST請求
@@ -47,7 +47,7 @@ namespace Joshua.Model
             {
                 string jsonResponse = www.downloadHandler.text;
                 Debug.Log("Response" + jsonResponse);
-                data = JsonUtility.FromJson<ReturnRoll>(jsonResponse);
+                Data = JsonUtility.FromJson<ReturnRoll>(jsonResponse);
                 requestComplete?.Invoke(this, EventArgs.Empty);
             }
 
