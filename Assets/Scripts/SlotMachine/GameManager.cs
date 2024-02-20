@@ -38,7 +38,7 @@ public class GameManager : MonoBehaviour
         }
 
         view = new SlotMachineView(uGUI, spinWheels, sprites, bt_Spin);
-        data = new DataHandle();
+        data = new DataHandle_Use_Net_Framework();
         presenter = new SlotMachinePresenter(view, data);
     }
 

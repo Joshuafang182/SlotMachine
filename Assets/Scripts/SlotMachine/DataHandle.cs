@@ -10,16 +10,16 @@ namespace Joshua.Model
     /// </summary>
     public class DataHandle : IDataHandle
     {
-        public ReturnRoll Data {  get; private set; }
+        public ReturnRoll Data {  get; protected set; }
 
 
-        private EventHandler requestComplete;
+        protected EventHandler requestComplete;
         public event EventHandler RequestComplete
         {
             add { requestComplete += value; }
             remove { requestComplete -= value; }
         }
-        public string[] GetStrings()
+        public virtual string[] GetStrings()
         {
             return Data.CURRENT_ROLL;
         }
@@ -30,7 +30,7 @@ namespace Joshua.Model
         /// <param name="v1">參數1</param>
         /// <param name="v2">參數2</param>
         /// <returns></returns>
-        public async Task SendRequest(string url, string v1, string v2)
+        public virtual async Task SendRequest(string url, string v1, string v2)
         {
             WWWForm form = new WWWForm();
             form.AddField(v1, v2);
